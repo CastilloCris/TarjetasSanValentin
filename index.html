@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOVE / PULSE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 
+    NOTA: Asegúrate de tener los siguientes archivos en la misma carpeta:
+    - music.mp3
+    - video.mp4
+    - img1.jpg, img2.jpg, img3.jpg
+    - pareja.jpg
+  -->
+
+  <!-- AUDIO -->
+  <audio id="music" src="Carlos Rivera - Te Esperaba (Lyric Video).m4a" loop></audio>
+
+  <!-- TEXTO -->
+  <div class="intro" id="intro">
+    <span>escuchá</span>
+  </div>
+
+  <div class="hint">deslizá</div>
+
+  <!-- CANVAS -->
+  <canvas id="canvas"></canvas>
+  <div class="vignette"></div>
+
+  <!-- ACTO 1 : VIDEO APARICIÓN -->
+  <div class="video-layer" id="videoLayer">
+    <video id="bgVideo" src="video.mp4" muted loop playsinline></video>
+  </div>
+
+  <!-- CONTENIDO SCROLLABLE (Frases y Botón) -->
+  <section class="love-scroll-section">
+      <div class="intro-title-group">
+        <div class="video-text">todo empieza acá</div>
+        <div class="romantic-quote main-quote">"Eres mi casualidad favorita"</div>
+      </div>
+
+      <div class="phrases-container">
+        <div class="phrase" style="--d:1">Eres la razón de mi sonrisa cada mañana</div>
+        <div class="phrase" style="--d:2">Mi lugar favorito en el mundo es a tu lado</div>
+        <div class="phrase" style="--d:3">Contigo el tiempo se detiene</div>
+        <div class="phrase" style="--d:4">Amo la forma en que me miras</div>
+        <div class="phrase" style="--d:5">Eres mi sueño hecho realidad</div>
+        <div class="phrase" style="--d:6">Gracias por hacerme tan feliz</div>
+        <div class="phrase" style="--d:7">No te cambiaría por nada ni nadie</div>
+        <div class="phrase" style="--d:8">Eres mi persona favorita</div>
+        <div class="phrase" style="--d:9">Mi corazón late más fuerte por ti</div>
+        <div class="phrase" style="--d:10">Te amo más de lo que las palabras pueden decir</div>
+        
+        <div class="floating-icons">
+           <span>❤️</span><span>✨</span><span>🌹</span><span>💌</span>
+        </div>
+      </div>
+
+      <div class="action-area">
+          <div class="click-hint">Presiona aquí ❤️</div>
+          <button class="scroll-btn" onclick="document.querySelector('.memories-container').scrollIntoView({behavior: 'smooth'})">
+            Ver nuestros recuerdos
+          </button>
+      </div>
+  </section>
+
+  <!-- FRASES INTERMEDIAS -->
+  <div class="interlude-text">
+    <p>"Cada momento contigo es un regalo"</p>
+  </div>
+
+  <!-- ACTO 2 : IMÁGENES / RECUERDOS (Slideshow Automático) -->
+  <section class="memories-container">
+    <div class="slideshow">
+      <div class="slide"><img src="foto1.jpg" alt="Recuerdo 1" /></div>
+      <div class="slide"><img src="foto2.jpg" alt="Recuerdo 2" /></div>
+      <div class="slide"><img src="foto3.jpg" alt="Recuerdo 3" /></div>
+      <div class="slide"><img src="foto4.jpg" alt="Recuerdo 4" /></div>
+      <div class="slide"><img src="foto5.jpg" alt="Recuerdo 5" /></div>
+      <div class="slide"><img src="foto6.jpg" alt="Recuerdo 6" /></div>
+      <div class="slide"><img src="foto7.jpg" alt="Recuerdo 7" /></div>
+      <div class="slide"><img src="foto1.jpg" alt="Recuerdo 1" /></div>
+      <div class="slide"><img src="foto2.jpg" alt="Recuerdo 2" /></div>
+      <div class="slide"><img src="foto3.jpg" alt="Recuerdo 3" /></div>
+      <div class="slide"><img src="foto4.jpg" alt="Recuerdo 4" /></div>
+      <div class="slide"><img src="foto5.jpg" alt="Recuerdo 5" /></div>
+      <div class="slide"><img src="foto6.jpg" alt="Recuerdo 6" /></div>
+      <div class="slide"><img src="foto7.jpg" alt="Recuerdo 7" /></div>
+    </div>
+    <div class="continue-hint">aún hay más amor...</div>
+  </section>
+
+  <!-- FRASES INTERMEDIAS 2 -->
+  <div class="interlude-text secondary">
+    <p>"Juntos es mi lugar favorito"</p>
+  </div>
+
+  <!-- ACTO 3 : FINAL (Sobre y TE AMO) -->
+  <section class="final" id="finalSection">
+    
+    <!-- ENVELOPE -->
+    <div class="envelope-wrapper" id="envelopeWrapper">
+        <div class="envelope">
+            <div class="front"></div>
+            <div class="card">
+                <div class="text">
+                    <p>Mi amor,</p>
+                    <p>Cada día a tu lado es una nueva aventura llena de amor. Eres mi todo.</p>
+                    <p>Te amo infinito.</p>
+                </div>
+                <div class="heart-seal">❤️</div>
+            </div>
+            <div class="hearts-burst">
+                <div class="burst-heart">💖</div>
+                <div class="burst-heart">💖</div>
+                <div class="burst-heart">💖</div>
+            </div>
+        </div>
+        <div class="envelope-hint">Un mensaje para ti...</div>
+    </div>
+
+    <!-- GRAND FINALE -->
+    <div class="grand-finale hidden" id="grandFinale">
+        <h1 class="giant-te-amo">TE AMO</h1>
+        <div class="sub-te-amo">Para siempre</div>
+        <div class="final-heart-container">
+             <div class="final-heart">
+               <div class="final-heart-mask">
+                 <img src="foto6.jpg" alt="Nosotros" />
+               </div>
+             </div>
+        </div>
+    </div>
+
+  </section>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
