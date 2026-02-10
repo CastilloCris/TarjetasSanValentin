@@ -1,7 +1,11 @@
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 document.addEventListener('DOMContentLoaded', () => {
   initAudio();
   initIntro();
-  initCanvas();
+  if (!prefersReducedMotion) {
+    initCanvas();
+  }
   initVideoScroll();
   initObservers();
   initSlideshow();
@@ -33,16 +37,25 @@ function initPhrases() {
 
 function initAudio() {
   const music = document.getElementById('music');
+  const gate = document.getElementById('audioGate');
   if (!music) return;
   
   const playMusic = () => {
     music.volume = 0.18;
-    music.play().catch(err => console.log('Audio autoplay prevented', err));
-    document.removeEventListener('touchstart', playMusic);
-    document.removeEventListener('click', playMusic);
+    return music.play().then(() => {
+      if (gate) gate.classList.add('hidden');
+    }).catch(() => {
+      if (gate) gate.classList.remove('hidden');
+    });
   };
 
-  document.addEventListener('touchstart', playMusic, { once: true });
+  if (gate) {
+    gate.addEventListener('click', () => {
+      playMusic();
+    });
+  }
+
+  document.addEventListener('touchstart', playMusic, { once: true, passive: true });
   document.addEventListener('click', playMusic, { once: true });
 }
 
@@ -54,28 +67,49 @@ function initIntro() {
     setTimeout(() => intro.classList.add('show'), 800);
   }
 
-  // Fade out intro and hint on scroll
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    const fadeStart = 10; // Start fading almost immediately
-    const fadeEnd = 200; // Fully gone quickly
-    
+  // Fade out intro and hint on scroll (incl. mobile)
+  const fadeStart = 10;
+  const fadeEnd = 200;
+  let ticking = false;
+
+  const updateIntro = () => {
+    const scrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+
     let opacity = 1;
     if (scrollY > fadeStart) {
       opacity = 1 - (scrollY - fadeStart) / (fadeEnd - fadeStart);
       opacity = Math.max(0, opacity);
     }
-    
+
     if (intro) {
-        // Only apply if class 'show' is present to avoid overriding initial fade-in
-        if (intro.classList.contains('show')) {
-            intro.style.opacity = opacity;
-        }
+      if (intro.classList.contains('show')) {
+        intro.style.opacity = opacity;
+      }
+      if (scrollY >= fadeEnd) {
+        intro.classList.add('hidden');
+      } else {
+        intro.classList.remove('hidden');
+      }
     }
+
     if (hint) {
-        hint.style.opacity = opacity * 0.4;
+      hint.style.opacity = opacity * 0.4;
     }
-  });
+
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (!ticking) {
+      window.requestAnimationFrame(updateIntro);
+      ticking = true;
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('touchmove', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  updateIntro();
 }
 
 function initCanvas() {
@@ -88,7 +122,7 @@ function initCanvas() {
   let scrollEnergy = 0;
   let lastScroll = window.scrollY;
 
-  const colors = ['#ff7eb3', '#ff758c', '#ffffff', '#ffd1dc'];
+  const colors = ['#ff7a8a', '#ffb563', '#fff1e6', '#ffd29b'];
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -207,6 +241,15 @@ function initSlideshow() {
   const hint = document.querySelector('.continue-hint');
   
   if (!container || slides.length === 0) return;
+
+  if (prefersReducedMotion) {
+    slides.forEach((slide, index) => {
+      slide.classList.toggle('active', index === 0);
+      slide.classList.remove('exit');
+    });
+    if (hint) hint.classList.add('show');
+    return;
+  }
 
   let hasStarted = false;
   let currentSlide = 0;
